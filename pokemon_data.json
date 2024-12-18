@@ -1,0 +1,30 @@
+[
+  {
+      "name": "Garchomp",
+      "type": ["Dragon", "Ground"],
+      "hp": 200,
+      "attack": 130,
+      "defense": 100,
+      "moves": ["Earthquake", "Dragon Claw", "Stone Edge", "Swords Dance"],
+      "item": "Life Orb"
+  },
+  {
+      "name": "Togekiss",
+      "type": ["Fairy", "Flying"],
+      "hp": 190,
+      "attack": 90,
+      "defense": 115,
+      "moves": ["Air Slash", "Thunder Wave", "Aura Sphere", "Roost"],
+      "item": "Leftovers"
+  },
+  {
+    "name": "Swampert",
+    "type": ["Water", "Ground"],
+    "hp": 210,
+    "attack": 110,
+    "defense": 90,
+    "moves": ["Earthquake", "Waterfall", "Ice Beam", "Protect"],
+    "item": "Rindo Berry"
+}
+
+]
