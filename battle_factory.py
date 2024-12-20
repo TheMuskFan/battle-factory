@@ -97,10 +97,16 @@ def calculate_damage(attacker, defender, move):
    # Calculate type effectiveness
    type_multiplier = type_chart.get_type_multiplier(move_type, defender["type"])
 
-   # If immune, no damage is dealt
+   # Provide feedback based on type effectiveness
    if type_multiplier == 0:
       print(f"{defender['name']} is immune to {move_type}!")
       return 0
+   
+   elif type_multiplier > 1:
+      print(f"It's super effective!")
+   
+   elif type_multiplier <= 0.5:
+      print(f"It's not very effective!")
 
    # Calculate STAB (Same Type Attack Bonus)
    stab = 1.5 if move_type in attacker["type"] else 1.0
@@ -125,14 +131,30 @@ def calculate_damage(attacker, defender, move):
    )
    return max(damage, 1)  # Ensure at least 1 damage is dealt
 
+def select_move(pokemon):
+    """
+    Allows the player to select a valid move for the given Pokémon.
+    
+    Parameters:
+    - pokemon (dict): The Pokémon dictionary, including its moves.
+
+    Returns:
+    - dict: The selected move's dictionary details.
+    """
+    while True:
+        print(f"\nMoves for {pokemon['name']}: {', '.join(pokemon['moves'])}")
+        move_name = input("Choose a move: ").strip()
+        if move_name in pokemon["moves"]: 
+            return moves[move_name]  # Return the corresponding move dictionary
+        else:
+            print("Invalid move. Please try again.")
+
 def battle(player_pokemon, opponent_pokemon):
    print(f"\nBattle: {player_pokemon['name']} vs {opponent_pokemon['name']}!")
    
    while player_pokemon['hp'] > 0 and opponent_pokemon['hp'] > 0:
       # Player's turn
-      print(f"\nYour Moves: {player_pokemon['moves']}")
-      move = input("Choose a move: ").strip()
-
+      move = select_move(player_pokemon)  # Get the move dictionary from user input
       damage = calculate_damage(player_pokemon, opponent_pokemon, move)  
       print(f"{player_pokemon['name']} used {move}!")
       opponent_pokemon['hp'] -= damage
@@ -147,7 +169,9 @@ def battle(player_pokemon, opponent_pokemon):
       
        # AI Turn
       print(f"\nOpponent's Turn!")
-      damage = calculate_damage(opponent_pokemon, player_pokemon, 60)
+      ai_move_name = opponent_pokemon["moves"][0]
+      ai_move = moves[ai_move_name]
+      damage = calculate_damage(opponent_pokemon, player_pokemon, ai_move)
       player_pokemon['hp'] -= damage
       if player_pokemon['hp'] < 0:
          player_pokemon['hp'] = 0
