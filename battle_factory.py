@@ -26,6 +26,8 @@ for pokemon in opponent_team:
     print(f"- {pokemon['name']} ({', '.join(pokemon['type'])})")
 
 # battle functions
+
+# This function calculates the damage to done to a Pokemon given the attacker, defender and move power
 def calculate_damage(attacker, defender, move_power):
    return int ((attacker["attack"] / defender["defense"]) * move_power)
 
