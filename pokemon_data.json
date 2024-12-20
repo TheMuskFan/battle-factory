@@ -1,30 +1,152 @@
-[
-  {
-      "name": "Garchomp",
-      "type": ["Dragon", "Ground"],
-      "hp": 200,
-      "attack": 130,
-      "defense": 100,
-      "moves": ["Earthquake", "Dragon Claw", "Stone Edge", "Swords Dance"],
-      "item": "Life Orb"
-  },
-  {
-      "name": "Togekiss",
-      "type": ["Fairy", "Flying"],
-      "hp": 190,
-      "attack": 90,
-      "defense": 115,
-      "moves": ["Air Slash", "Thunder Wave", "Aura Sphere", "Roost"],
-      "item": "Leftovers"
-  },
-  {
-    "name": "Swampert",
-    "type": ["Water", "Ground"],
-    "hp": 210,
-    "attack": 110,
-    "defense": 90,
-    "moves": ["Earthquake", "Waterfall", "Ice Beam", "Protect"],
-    "item": "Rindo Berry"
-}
-
+ [
+    {
+        "name": "Garchomp",
+        "type": ["Dragon", "Ground"],
+        "hp": 200,
+        "attack": 130,
+        "defense": 100,
+        "special_attack": 80,
+        "special_defense": 85,
+        "moves": ["Earthquake", "Dragon Claw", "Stone Edge", "Crunch"]
+    },
+    {
+        "name": "Togekiss",
+        "type": ["Fairy", "Flying"],
+        "hp": 190,
+        "attack": 90,
+        "defense": 115,
+        "special_attack": 120,
+        "special_defense": 115,
+        "moves": ["Air Slash", "Aura Sphere", "Flamethrower", "Thunderbolt"]
+    },
+    {
+        "name": "Swampert",
+        "type": ["Water", "Ground"],
+        "hp": 210,
+        "attack": 110,
+        "defense": 90,
+        "special_attack": 85,
+        "special_defense": 90,
+        "moves": ["Earthquake", "Waterfall", "Ice Beam", "Stone Edge"]
+    },
+    {
+        "name": "Charizard",
+        "type": ["Fire", "Flying"],
+        "hp": 170,
+        "attack": 104,
+        "defense": 78,
+        "special_attack": 109,
+        "special_defense": 85,
+        "moves": ["Flamethrower", "Air Slash", "Dragon Pulse", "Crunch"]
+    },
+    {
+        "name": "Metagross",
+        "type": ["Steel", "Psychic"],
+        "hp": 180,
+        "attack": 135,
+        "defense": 130,
+        "special_attack": 95,
+        "special_defense": 90,
+        "moves": ["Meteor Mash", "Earthquake", "Psychic", "Thunder Punch"]
+    },
+    {
+        "name": "Salamence",
+        "type": ["Dragon", "Flying"],
+        "hp": 190,
+        "attack": 135,
+        "defense": 80,
+        "special_attack": 110,
+        "special_defense": 80,
+        "moves": ["Dragon Claw", "Earthquake", "Fire Blast", "Crunch"]
+    },
+    {
+        "name": "Blissey",
+        "type": ["Normal"],
+        "hp": 255,
+        "attack": 10,
+        "defense": 10,
+        "special_attack": 75,
+        "special_defense": 135,
+        "moves": ["Flamethrower", "Thunderbolt", "Ice Beam", "Shadow Ball"]
+    },
+    {
+        "name": "Lucario",
+        "type": ["Fighting", "Steel"],
+        "hp": 170,
+        "attack": 110,
+        "defense": 70,
+        "special_attack": 115,
+        "special_defense": 70,
+        "moves": ["Close Combat", "Aura Sphere", "Psychic", "Dragon Pulse"]
+    },
+    {
+        "name": "Snorlax",
+        "type": ["Normal"],
+        "hp": 220,
+        "attack": 110,
+        "defense": 85,
+        "special_attack": 65,
+        "special_defense": 110,
+        "moves": ["Body Slam", "Crunch", "Earthquake", "Ice Punch"]
+    },
+    {
+        "name": "Roserade",
+        "type": ["Grass", "Poison"],
+        "hp": 160,
+        "attack": 90,
+        "defense": 70,
+        "special_attack": 125,
+        "special_defense": 105,
+        "moves": ["Sludge Bomb", "Energy Ball", "Shadow Ball", "Dragon Pulse"]
+    },
+    {
+        "name": "Gliscor",
+        "type": ["Ground", "Flying"],
+        "hp": 185,
+        "attack": 95,
+        "defense": 125,
+        "special_attack": 45,
+        "special_defense": 75,
+        "moves": ["Earthquake", "Stone Edge", "Thunder Punch", "Ice Punch"]
+    },
+    {
+        "name": "Weavile",
+        "type": ["Dark", "Ice"],
+        "hp": 150,
+        "attack": 120,
+        "defense": 65,
+        "special_attack": 45,
+        "special_defense": 85,
+        "moves": ["Ice Punch", "Crunch", "Thunder Punch", "Body Slam"]
+    },
+    {
+        "name": "Tyranitar",
+        "type": ["Rock", "Dark"],
+        "hp": 200,
+        "attack": 134,
+        "defense": 110,
+        "special_attack": 95,
+        "special_defense": 100,
+        "moves": ["Stone Edge", "Crunch", "Earthquake", "Fire Blast"]
+    },
+    {
+        "name": "Gardevoir",
+        "type": ["Psychic"],
+        "hp": 170,
+        "attack": 80,
+        "defense": 70,
+        "special_attack": 125,
+        "special_defense": 115,
+        "moves": ["Psychic", "Flamethrower", "Thunderbolt", "Shadow Ball"]
+    },
+    {
+        "name": "Infernape",
+        "type": ["Fire", "Fighting"],
+        "hp": 160,
+        "attack": 110,
+        "defense": 75,
+        "special_attack": 104,
+        "special_defense": 71,
+        "moves": ["Flamethrower", "Close Combat", "Thunder Punch", "Shadow Ball"]
+    }
 ]
