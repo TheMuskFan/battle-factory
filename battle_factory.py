@@ -74,6 +74,12 @@ def calculate_damage(attacker, defender, move):
    move_type = move["type"]
    move_power = move["power"]
    move_category = move["category"] # Physical or Special 
+   move_accuracy = move["accuracy"]  # Accuracy percentage (e.g., 100, 80)
+
+   # Check for move accuracy
+   if random.uniform(0, 100) > move_accuracy:
+      print(f"{attacker['name']} missed!")
+      return 0
 
    # Determine Relevant Stats
    if move_category == "Physical":
@@ -85,17 +91,38 @@ def calculate_damage(attacker, defender, move):
    else:
       return 0
    
+   # Ensure defense is not zero to avoid division by zero
+   defense_stat = max(defense_stat, 1)
+   
    # Calculate type effectiveness
    type_multiplier = type_chart.get_type_multiplier(move_type, defender["type"])
+
+   # If immune, no damage is dealt
+   if type_multiplier == 0:
+      print(f"{defender['name']} is immune to {move_type}!")
+      return 0
 
    # Calculate STAB (Same Type Attack Bonus)
    stab = 1.5 if move_type in attacker["type"] else 1.0
 
+   # Add critical hit chance
+   is_critical = random.random() < 0.0625  # 6.25% chance
+   critical_multiplier = 2.0 if is_critical else 1.0
+   if is_critical:
+        print(f"A critical hit!")
+
    # Add randomness for attack damage 
    randomness = random.uniform(0.85, 1.0)
 
-    # Final damage formula
-   damage = int((attack_stat / defense_stat) * move_power * type_multiplier * stab * randomness)
+   # Final damage formula
+   damage = int(
+      (attack_stat / defense_stat)
+      * move_power
+      * type_multiplier
+      * stab
+      * critical_multiplier
+      * randomness
+   )
    return max(damage, 1)  # Ensure at least 1 damage is dealt
 
 def battle(player_pokemon, opponent_pokemon):
@@ -105,7 +132,8 @@ def battle(player_pokemon, opponent_pokemon):
       # Player's turn
       print(f"\nYour Moves: {player_pokemon['moves']}")
       move = input("Choose a move: ").strip()
-      damage = calculate_damage(player_pokemon, opponent_pokemon, 60)  # Simplified damage
+
+      damage = calculate_damage(player_pokemon, opponent_pokemon, move)  
       print(f"{player_pokemon['name']} used {move}!")
       opponent_pokemon['hp'] -= damage
       if opponent_pokemon['hp'] < 0:
