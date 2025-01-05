@@ -65,18 +65,42 @@ class Battle:
 
             # Opponent's turn (AI)
             print(f"\nOpponent's turn! {opponent_pokemon.name}'s HP: {opponent_pokemon.hp}, {player_pokemon.name}'s HP: {player_pokemon.hp}")
-            ai_move_name = random.choice(opponent_pokemon.moves)
-            ai_move = moves.get(ai_move_name)
-            if not ai_move:
-                print(f"AI failed to select a valid move: {ai_move_name}")
-                continue
 
-            damage = self.calculate_damage(opponent_pokemon, player_pokemon, ai_move)
-            print(f"{opponent_pokemon.name} used {ai_move.name}!")
-            player_pokemon.hp -= damage
-            player_pokemon.hp = max(player_pokemon.hp, 0)
-            print(f"{player_pokemon.name} took {damage} damage! Remaining HP: {player_pokemon.hp}")
+            # Determine the best move based on type effectiveness
+            best_move = None
+            highest_damage = 0
 
-            if player_pokemon.hp == 0:
-                print(f"{player_pokemon.name} fainted!")
-                break
+            for move_name in opponent_pokemon.moves:
+                ai_move = moves.get(move_name)
+                if not ai_move:
+                    continue
+
+            # Calculate type multiplier for this move
+            type_multiplier = get_type_multiplier(ai_move.type, player_pokemon.types)
+            
+            # Estimate damage based on type multiplier and move power
+            estimated_damage = ai_move.power * type_multiplier
+
+            # Choose the move with the highest estimated damage
+            if estimated_damage > highest_damage:
+                best_move = ai_move
+                highest_damage = estimated_damage
+
+            # Fall back to a random move if no "best" move is determined
+            if best_move is None:
+                best_move_name = random.choice(opponent_pokemon.moves)
+                best_move = moves.get(best_move_name)
+
+            # Execute the selected move
+            if best_move:
+                damage = self.calculate_damage(opponent_pokemon, player_pokemon, best_move)
+                print(f"{opponent_pokemon.name} used {best_move.name}!")
+                player_pokemon.hp -= damage
+                player_pokemon.hp = max(player_pokemon.hp, 0)
+                print(f"{player_pokemon.name} took {damage} damage! Remaining HP: {player_pokemon.hp}")
+
+                if player_pokemon.hp == 0:
+                    print(f"{player_pokemon.name} fainted!")
+                    return
+            else:
+                print("AI failed to select a valid move.")

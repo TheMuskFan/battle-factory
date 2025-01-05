@@ -1,8 +1,9 @@
-# main.py
 from pokemon import Pokemon
-from moves import Move
 from battle import Battle
+from moves import moves
 import random
+from tkinter import Tk
+from ui import BattleFactoryApp
 
 # Load Pokémon and moves
 import json
@@ -10,7 +11,7 @@ import json
 with open("pokemon_data.json", "r") as file:
     rental_pool = json.load(file)
 
-# Initialize Pokémon and moves
+# Initialize Pokémon
 def create_pokemon(data):
     return Pokemon(
         name=data["name"],
@@ -29,15 +30,8 @@ pokemon_pool = [create_pokemon(p) for p in rental_pool]
 player_team = random.sample(pokemon_pool, 3)
 opponent_team = random.sample(pokemon_pool, 3)
 
-# Display teams
-print("Your Team:")
-for p in player_team:
-    print(f"- {p.name} ({', '.join(p.types)})")
-
-print("\nOpponent Team:")
-for p in opponent_team:
-    print(f"- {p.name} ({', '.join(p.types)})")
-
-# Start a battle
+# Start the Tkinter application
+root = Tk()
 battle = Battle(player_team, opponent_team)
-battle.battle_turn(player_team[0], opponent_team[0])
+app = BattleFactoryApp(root, battle)
+root.mainloop()
