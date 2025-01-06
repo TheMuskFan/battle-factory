@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import messagebox
-from tkinter.ttk import Progressbar
 from battle import Battle
 from pokemon import Pokemon
 from moves import moves
@@ -36,12 +35,15 @@ class BattleFactoryApp:
         self.current_player_pokemon = self.battle.player_team[0]
         self.current_opponent_pokemon = self.battle.opponent_team[0]
 
+        # Add `max_hp` attributes to Pokémon
+        for pokemon in self.battle.player_team + self.battle.opponent_team:
+            pokemon.max_hp = pokemon.hp
+
         # Set up window
         self.root.title("Battle Factory")
         self.create_widgets()
 
     def create_widgets(self):
-        
         # Player Pokémon details
         self.player_frame = tk.Frame(self.root)
         self.player_frame.pack(pady=10)
@@ -49,8 +51,9 @@ class BattleFactoryApp:
         self.player_label = tk.Label(self.player_frame, text=f"Your Pokémon: {self.current_player_pokemon.name}")
         self.player_label.pack()
 
-        self.player_hp = tk.Label(self.player_frame, text=f"HP: {self.current_player_pokemon.hp}")
-        self.player_hp.pack()
+        self.player_hp_bar = tk.Canvas(self.player_frame, width=200, height=20, bg="gray")
+        self.player_hp_bar.pack()
+        self.update_hp_bar(self.player_hp_bar, self.current_player_pokemon.hp, self.current_player_pokemon.max_hp)
 
         # Opponent Pokémon details
         self.opponent_frame = tk.Frame(self.root)
@@ -59,8 +62,9 @@ class BattleFactoryApp:
         self.opponent_label = tk.Label(self.opponent_frame, text=f"Opponent: {self.current_opponent_pokemon.name}")
         self.opponent_label.pack()
 
-        self.opponent_hp = tk.Label(self.opponent_frame, text=f"HP: {self.current_opponent_pokemon.hp}")
-        self.opponent_hp.pack()
+        self.opponent_hp_bar = tk.Canvas(self.opponent_frame, width=200, height=20, bg="gray")
+        self.opponent_hp_bar.pack()
+        self.update_hp_bar(self.opponent_hp_bar, self.current_opponent_pokemon.hp, self.current_opponent_pokemon.max_hp)
 
         # Moves
         self.moves_frame = tk.Frame(self.root)
@@ -72,6 +76,16 @@ class BattleFactoryApp:
             btn.pack(side=tk.LEFT, padx=5)
             self.move_buttons.append(btn)
 
+    def update_hp_bar(self, canvas, current_hp, max_hp):
+        """
+        Updates the HP bar on the given canvas.
+        """
+        canvas.delete("hp_bar")  # Clear previous bar
+        hp_percentage = current_hp / max_hp
+        hp_width = int(200 * hp_percentage)  # Max width = 200
+        color = "green" if hp_percentage > 0.5 else "yellow" if hp_percentage > 0.2 else "red"
+        canvas.create_rectangle(0, 0, hp_width, 20, fill=color, tags="hp_bar")
+
     def use_move(self, move_name):
         # Player's turn
         move = moves[move_name]
@@ -81,8 +95,11 @@ class BattleFactoryApp:
             move
         )
         self.current_opponent_pokemon.hp -= damage
+        self.current_opponent_pokemon.hp = max(0, self.current_opponent_pokemon.hp)
+
+        self.update_hp_bar(self.opponent_hp_bar, self.current_opponent_pokemon.hp, self.current_opponent_pokemon.max_hp)
+
         if self.current_opponent_pokemon.hp <= 0:
-            self.current_opponent_pokemon.hp = 0
             messagebox.showinfo("Victory", f"{self.current_opponent_pokemon.name} fainted!")
             if not self.switch_opponent():
                 return
@@ -96,52 +113,28 @@ class BattleFactoryApp:
             ai_move
         )
         self.current_player_pokemon.hp -= damage
+        self.current_player_pokemon.hp = max(0, self.current_player_pokemon.hp)
+
+        self.update_hp_bar(self.player_hp_bar, self.current_player_pokemon.hp, self.current_player_pokemon.max_hp)
+
         if self.current_player_pokemon.hp <= 0:
-            self.current_player_pokemon.hp = 0
             messagebox.showinfo("Defeat", f"{self.current_player_pokemon.name} fainted!")
             if not self.switch_player():
                 return
 
         self.update_ui()
 
-    def switch_opponent(self):
-        """
-        Switch to the next opponent Pokémon if available.
-        """
-        self.battle.opponent_team = [p for p in self.battle.opponent_team if p.hp > 0]
-        if not self.battle.opponent_team:
-            messagebox.showinfo("Game Over", "You won the battle!")
-            self.root.quit()
-            return False
-        self.current_opponent_pokemon = self.battle.opponent_team[0]
-        self.update_ui()
-        return True
-
-    def switch_player(self):
-        """
-        Switch to the next player Pokémon if available.
-        """
-        self.battle.player_team = [p for p in self.battle.player_team if p.hp > 0]
-        if not self.battle.player_team:
-            messagebox.showinfo("Game Over", "You lost the battle!")
-            self.root.quit()
-            return False
-        self.current_player_pokemon = self.battle.player_team[0]
-        self.update_ui()
-        return True
-
     def update_ui(self):
         """
         Update all UI elements to reflect the current state.
         """
         self.player_label.config(text=f"Your Pokémon: {self.current_player_pokemon.name}")
-        self.player_hp.config(text=f"HP: {self.current_player_pokemon.hp}")
         self.opponent_label.config(text=f"Opponent: {self.current_opponent_pokemon.name}")
-        self.opponent_hp.config(text=f"HP: {self.current_opponent_pokemon.hp}")
 
-        # Update move buttons
-        for btn, move in zip(self.move_buttons, self.current_player_pokemon.moves):
-            btn.config(text=move, state=tk.NORMAL if self.current_player_pokemon.hp > 0 else tk.DISABLED)
+        # Update HP bars
+        self.update_hp_bar(self.player_hp_bar, self.current_player_pokemon.hp, self.current_player_pokemon.max_hp)
+        self.update_hp_bar(self.opponent_hp_bar, self.current_opponent_pokemon.hp, self.current_opponent_pokemon.max_hp)
+
 
 
 # Example: Initialize battle

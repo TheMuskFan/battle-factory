@@ -11,8 +11,12 @@ class Battle:
     def calculate_damage(self, attacker: Pokemon, defender: Pokemon, move):
         type_multiplier = get_type_multiplier(move.type, defender.types)
         stab = 1.5 if move.type in attacker.types else 1.0
+
+        # probability of getting a critical hit
         is_critical = random.random() < 0.0625
         critical_multiplier = 2.0 if is_critical else 1.0
+
+        # add some variance to the move damage
         randomness = random.uniform(0.85, 1.0)
 
         if move.category == "Physical":
