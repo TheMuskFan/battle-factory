@@ -134,6 +134,61 @@ class BattleFactoryApp:
         # Update HP bars
         self.update_hp_bar(self.player_hp_bar, self.current_player_pokemon.hp, self.current_player_pokemon.max_hp)
         self.update_hp_bar(self.opponent_hp_bar, self.current_opponent_pokemon.hp, self.current_opponent_pokemon.max_hp)
+    
+    def switch_opponent(self):
+        """
+        Switch to the next opponent Pokemon if available.
+        """
+
+        self.battle.opponent_team = [p for p in self.battle.opponent_team if p.hp > 0]
+        if not self.battle.opponent_team:
+            messagebox.showinfo("Game Over", "You won the battle!")
+            self.root.quit()
+            return False
+        self.current_opponent_pokemon = self.battle.opponent_team[0]
+        self.update_ui()
+        self.update_move_buttons() # Refresh move buttons for the incoming pokemon 
+        return True
+    
+    def switch_player(self):
+        """
+        Switch to the next available player Pokemon if the current one faints
+
+        Returns:
+            bool: True if a Pokemon was succesfully switched, False if no Pokemon are left 
+        """
+
+        #Filter out fainted Pokemon
+        self.battle.player_team = [p for p in self.battle.player_team if p.hp > 0]
+
+        if not self.battle.player_team:
+            # No pokemon left, player loses the battle
+            messagebox.showinfo("Game Over", "You lost the battle!") 
+            self.root.quit() # Exit the game
+            return False
+        
+        # Switch to the next Pokemon 
+        self.current_player_pokemon = self.battle.player_team[0]
+        self.update_ui()
+        self.update_move_buttons() # Refresh move buttons for the incoming pokemon 
+        return True
+    
+    def update_move_buttons(self):
+        """
+        Refresh the move buttons to match the current Pokemon's moves.
+        """
+        # Clear existing buttons 
+        for btn in self.move_buttons:
+            btn.destroy()
+        self.move_buttons = []
+
+        # Create new buttons for the current Pokemon's moves
+        for move in self.current_player_pokemon.moves:
+            btn = tk.Button(self.moves_frame,text=move,command=lambda m=move: self.use_move(m))
+            btn.pack(side=tk.LEFT, padx=5)
+            self.move_buttons.append(btn)
+
+
 
 
 
