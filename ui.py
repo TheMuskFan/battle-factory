@@ -75,6 +75,27 @@ class BattleFactoryApp:
             btn = tk.Button(self.moves_frame, text=move, command=lambda m=move: self.use_move(m))
             btn.pack(side=tk.LEFT, padx=5)
             self.move_buttons.append(btn)
+        
+        # Battle log 
+        self.log_frame = tk.Frame(self.root)
+        self.log_frame.pack(pady=10)
+
+        self.log_text = tk.Text(self.log_frame, width=50, height=15, state=tk.DISABLED,wrap=tk.WORD)
+        self.log_text.pack(side=tk.LEFT, padx=5)
+
+        self.log_scrollbar = tk.Scrollbar(self.log_frame, command=self.log_text.yview)
+        self.log_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+
+        self.log_text.config(yscrollcommand=self.log_scrollbar.set)
+    
+    def log_action(self, message):
+        """
+        Adds message to the battle log 
+        """
+        self.log_text.config(state=tk.NORMAL)
+        self.log_text.insert(tk.END, f"{message}\n")
+        self.log_text.see(tk.END) # Scroll to bottom
+        self.log_text.config(state=tk.DISABLED)
 
     def update_hp_bar(self, canvas, current_hp, max_hp):
         """
@@ -96,6 +117,9 @@ class BattleFactoryApp:
         )
         self.current_opponent_pokemon.hp -= damage
         self.current_opponent_pokemon.hp = max(0, self.current_opponent_pokemon.hp)
+        self.log_action(f"{self.current_player_pokemon.name} used {move.name}!")
+        if damage > 0:
+            self.log_action(f"{self.current_opponent_pokemon.name} took {damage} damage!")
 
         self.update_hp_bar(self.opponent_hp_bar, self.current_opponent_pokemon.hp, self.current_opponent_pokemon.max_hp)
 
